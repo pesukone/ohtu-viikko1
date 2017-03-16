@@ -65,4 +65,73 @@ public class VarastoTest {
         assertEquals(4, varasto.paljonkoMahtuu(), vertailuTarkkuus);
     }
 
+	@Test
+	public void eiVoiLisataYliKapasiteetin() {
+		varasto.lisaaVarastoon(Double.MAX_VALUE);
+		
+		assertEquals(varasto.getSaldo(), varasto.getTilavuus(), vertailuTarkkuus);
+	}
+	
+	@Test
+	public void eiVoiLisataNegatiivista() {
+		double saldo = varasto.getSaldo();
+		varasto.lisaaVarastoon(-15);
+		
+		assertEquals(varasto.getSaldo(), saldo, vertailuTarkkuus);
+	}
+	
+	@Test
+	public void eiVoiOttaaNegatiivista() {
+		assertEquals(varasto.otaVarastosta(-10), 0, vertailuTarkkuus);
+	}
+	
+	@Test
+	public void luodullaVarastollaOnOikeaSaldoJaTilavuus() {
+		Varasto uusi = new Varasto(20);
+		Varasto taytetty = new Varasto(20, 10);
+		
+		assertEquals(uusi.getTilavuus(), 20, vertailuTarkkuus);
+		assertEquals(uusi.getSaldo(), 0, vertailuTarkkuus);
+		
+		assertEquals(taytetty.getTilavuus(), 20, vertailuTarkkuus);
+		assertEquals(taytetty.getSaldo(), 10, vertailuTarkkuus);
+	}
+	
+	@Test
+	public void virheellinenTilavuusNollataan() {
+		Varasto uusi = new Varasto(-30);
+		Varasto taytetty = new Varasto(-30, -50);
+		
+		assertEquals(uusi.getTilavuus(), 0, vertailuTarkkuus);
+		assertEquals(taytetty.getTilavuus(), 0, vertailuTarkkuus);
+	}
+	
+	@Test
+	public void virheellinenAlkusaldoNollataan() {
+		Varasto taytetty = new Varasto(30, -3);
+		
+		assertEquals(taytetty.getSaldo(), 0, vertailuTarkkuus);
+	}
+	
+	@Test
+	public void varastoVoiVuotaaYli() {
+		Varasto ylivuoto = new Varasto(30, 50);
+		
+		assertEquals(ylivuoto.getSaldo(), 30, vertailuTarkkuus);
+	}
+	
+	@Test
+	public void varastostaVoiYrittaaOttaaLiikaa() {
+		double saldo = varasto.getSaldo();
+		
+		assertEquals(varasto.otaVarastosta(Double.MAX_VALUE), saldo, vertailuTarkkuus);
+	}
+	
+	@Test
+	public void toStringTulostaaOikeassaMuodossa() {
+		double saldo = varasto.getSaldo();
+		
+		assertTrue(varasto.toString().contains(Double.toString(varasto.getSaldo())));
+		assertTrue(varasto.toString().contains(Double.toString(varasto.paljonkoMahtuu())));
+	}
 }
