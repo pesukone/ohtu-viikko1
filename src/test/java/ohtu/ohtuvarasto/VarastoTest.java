@@ -134,9 +134,4 @@ public class VarastoTest {
 		assertTrue(varasto.toString().contains(Double.toString(varasto.getSaldo())));
 		assertTrue(varasto.toString().contains(Double.toString(varasto.paljonkoMahtuu())));
 	}
-	
-	@Test
-	public void kontradiktio() {
-		assertTrue(false);
-	}
 }
